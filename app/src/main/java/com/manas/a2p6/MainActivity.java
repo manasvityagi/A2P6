@@ -1,6 +1,7 @@
 package com.manas.a2p6;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -23,16 +24,16 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.GoogleMap;
+
 
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
-    public GoogleMap mMap;
+
     Button locateBtn;
     Button weatherBtn;
     TextView locationField;
-    TextView tempratureField;
+    TextView temperatureField;
     public double latitude = 0.00;
     public double longitude = 0.00;
     private static final int REQUEST_CODE_LOC_PERMISSION = 1;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         locateBtn = (Button) findViewById(R.id.locateButton);
         weatherBtn = (Button) findViewById(R.id.getTempratureButton);
         locationField = findViewById(R.id.location_field);
-        tempratureField = findViewById(R.id.currentTemprature_field);
+        temperatureField = findViewById(R.id.currentTemprature_field);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapsFragment()).commit();
 
@@ -89,15 +90,15 @@ public class MainActivity extends AppCompatActivity {
                             String currentWindSpeed = json_inner_current_obj.getString("wind_speed");
                             String humidity = json_inner_current_obj.getString("humidity");
                             String windDirection = json_inner_current_obj.getString("wind_deg");
-                            Double tempInCelcius = Double.valueOf(currentTemp) - 273.15;
+                            Double tempInCelsius = Double.parseDouble(currentTemp) - 273.15;
 
-                            String result = "Temperature: " + tempInCelcius + "\n" +
+                            String result = "Temperature: " + tempInCelsius + "\n" +
                                     "Pressure: " + currentPressure + "\n" +
                                     "Humidity: " + humidity + "\n" +
                                     "Wind Direction: " + windDirection + "\n" +
                                     "Wind Speed: " + currentWindSpeed;
 
-                            tempratureField.setText(String.valueOf(tempInCelcius));
+                            temperatureField.setText(String.valueOf(tempInCelsius));
                             Log.e("data", result);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -177,8 +178,9 @@ public class MainActivity extends AppCompatActivity {
         this.longitude=longitude;
     }
 
+
     private void setLocationOnActivity(double latitude, double longitude) {
-        locationField.setText(String.valueOf(latitude)+ ", "+ longitude);
+        locationField.setText(latitude + ", "+ longitude);
     }
 
     private void broadcastMessageToMapFragment(double latitude, double longitude) {
